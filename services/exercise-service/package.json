@@ -2,7 +2,7 @@
   "name": "exercise-service",
   "version": "1.0.0",
   "scripts": {
-    "build": "rm -rf ./dist && tsc",
+    "build": "rm -rf ./dist && npx tsc",
     "dev": "NODE_ENV=development tsnd --transpile-only --respawn ./src/index.ts",
     "start": "NODE_ENV=production node ./dist/src/index.js"
   },
