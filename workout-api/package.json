@@ -2,6 +2,7 @@
   "private": true,
   "name": "@superset/workout-api",
   "version": "1.0.0",
+  "author": "@pvulnguyen",
   "scripts": {
     "clean": "rm -rf node_modules && npm i",
     "build": "rm -rf dist && npx tsc",

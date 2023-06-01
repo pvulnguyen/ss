@@ -1,10 +1,16 @@
 {
+  "private": true,
   "name": "@superset/exercise-api",
   "version": "1.0.0",
+  "author": "@pvulnguyen",
+  "prisma": {
+    "seed": "tsnd --transpile-only ./prisma/seed/seed.ts"
+  },
   "scripts": {
-    "build": "npm install && npx tsc",
-    "dev": "NODE_ENV=development tsnd --transpile-only --respawn ./src/index.ts",
-    "start": "NODE_ENV=production node ./dist/src/index.js"
+    "clean": "rm -rf node_modules && npm i",
+    "build": "rm -rf dist && npx tsc",
+    "dev": "NODE_ENV=development tsnd --transpile-only --respawn src/index.ts",
+    "start": "NODE_ENV=production node dist/src/index.js"
   },
   "dependencies": {
     "@prisma/client": "^4.14.1",
@@ -27,8 +33,5 @@
     "prisma": "^4.14.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.0.4"
-  },
-  "prisma": {
-    "seed": "tsnd --transpile-only ./prisma/seed/seed.ts"
   }
 }
