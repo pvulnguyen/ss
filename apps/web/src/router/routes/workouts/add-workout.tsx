@@ -29,7 +29,6 @@ export function AddWorkout() {
     const { session } = useAuth();
     const token = session?.access_token;
 
-    const [isLoading, setLoading  ] = React.useState(true);
     const [exercises, setExercises] = React.useState<Exercise[]>([]);
     React.useEffect(() => {
         async function loadExercises() {
@@ -38,8 +37,6 @@ export function AddWorkout() {
                 setExercises(data);
             } catch (error) {
                 console.error(error);
-            } finally {
-                setLoading(false);
             }
         }
         loadExercises();
