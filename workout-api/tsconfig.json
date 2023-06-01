@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs",
+    "target": "ES2021",
+    "module": "Node16",
+    "rootDir": "./",
     "moduleResolution": "node",
     "baseUrl": "./",
-    "rootDir": "./",
+    "resolveJsonModule": true,
     "outDir": "./dist",
+    "verbatimModuleSyntax": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
