@@ -1,0 +1,35 @@
+{
+  "private": true,
+  "name": "@superset/web",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.0",
+    "@mantine/core": "^6.0.11",
+    "@mantine/form": "^6.0.11",
+    "@mantine/hooks": "^6.0.11",
+    "@phosphor-icons/react": "^2.0.9",
+    "@supabase/supabase-js": "^2.22.0",
+    "@tabler/icons-react": "^2.20.0",
+    "axios": "^1.4.0",
+    "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dom": "^18.2.0",
+    "react-helmet-async": "^1.3.0",
+    "react-router-dom": "^6.11.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.1.4",
+    "@types/react": "^18.2.6",
+    "@types/react-beautiful-dnd": "^13.1.4",
+    "@types/react-dom": "^18.2.4",
+    "@vitejs/plugin-react-swc": "^3.3.1",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.6"
+  }
+}
