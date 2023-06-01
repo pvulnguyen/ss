@@ -1,6 +1,5 @@
+import { Button, type ButtonProps } from '@mantine/core';
 import { Link } from 'react-router-dom';
-import { Button } from '@mantine/core';
-import type { ButtonProps } from '@mantine/core';
 
 interface Props extends ButtonProps {
     to: string;

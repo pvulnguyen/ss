@@ -1,5 +1,5 @@
-import { Outlet } from 'react-router-dom';
 import { Center } from '@mantine/core';
+import { Outlet } from 'react-router-dom';
 
 import { AppBar, AppContainer, Loader, SplashPage } from '#/components';
 import { useAuth } from '#/hooks';

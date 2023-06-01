@@ -16,20 +16,20 @@ export interface WorkoutResponse {
 
 export async function createWorkout(token: string, workout: WorkoutFormValues): Promise<WorkoutResponse> {
     const url = `${baseUrl}/workouts`;
-    return await sendRequest<WorkoutResponse>(url, token, 'POST', workout);
+    return await sendRequest<WorkoutResponse>(token, url, 'POST', workout);
 }
 
-export async function fetchWorkouts(token: string, userId: string): Promise<WorkoutResponse[]> {
+export async function fetchWorkouts(token: string): Promise<WorkoutResponse[]> {
     const url = `${baseUrl}/workouts/users`;
-    return await sendRequest<WorkoutResponse[]>(url, token, 'GET');
+    return await sendRequest<WorkoutResponse[]>(token, url, 'GET');
 }
 
 export async function fetchWorkout(token: string, id: string): Promise<WorkoutResponse> {
     const url = `${baseUrl}/workouts/${id}`;
-    return await sendRequest<WorkoutResponse>(url, token, 'GET');
+    return await sendRequest<WorkoutResponse>(token, url, 'GET');
 }
 
 export async function deleteWorkout(token: string, id: string): Promise<void> {
     const url = `${baseUrl}/workouts/${id}`;
-    await sendRequest<void>(url, token, 'DELETE');
+    return await sendRequest<void>(token, url, 'DELETE');
 }

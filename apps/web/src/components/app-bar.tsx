@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
 import { Button, Flex, Menu, NavLink, Text } from '@mantine/core';
 import { IconBarbell, IconHome, IconSettings } from '@tabler/icons-react';
+import { Link } from 'react-router-dom';
 
 import { useAuth } from '#/hooks';
 import { ButtonLink } from './button-link';
@@ -15,7 +15,7 @@ export function AppBar() {
                 label='Home'
                 variant='orange'
                 leftIcon={<IconHome size={16} />}
-                sx={{ borderRadius: '16px 0 0 0' }}
+                sx={{ borderRadius: '16px 0 0 0', fontSize: '12px' }}
             />
 
             <Menu position='top' withArrow>

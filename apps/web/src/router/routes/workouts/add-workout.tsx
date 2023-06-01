@@ -1,20 +1,21 @@
 import React from 'react';
 
-import { ActionIcon, Button, Flex, LoadingOverlay, Paper, Stack } from '@mantine/core';
+import { ActionIcon, Alert, Button, Flex, LoadingOverlay, Paper, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { randomId } from '@mantine/hooks';
 import { Trash } from '@phosphor-icons/react';
+import { IconAlertCircle } from '@tabler/icons-react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { useNavigate } from 'react-router-dom';
 
-import { fetchExercises } from '#/api/exercise-api';
+import { fetchExercises, type Exercise } from '#/api/exercise-api';
 import { createWorkout } from '#/api/workout-api';
 import { Title } from '#/components';
 import { useAuth } from '#/hooks';
 import { SelectExercise } from './components/select-exercise';
 import { WorkoutItemSet } from './components/workout-item-set';
-import type { Exercise } from '#/api/exercise-api';
 
-export type WorkoutFormValues = {
+export interface WorkoutFormValues {
     userId: string;
     createdAt: Date;
     workoutItems: {
@@ -26,22 +27,21 @@ export type WorkoutFormValues = {
 
 export function AddWorkout() {
     const { session } = useAuth();
-    
-    const [isLoading, setLoading] = React.useState(true);
-    const [exercises, setExercises] = React.useState<Exercise[]>([]);
+    const token = session?.access_token;
 
+    const [isLoading, setLoading  ] = React.useState(true);
+    const [exercises, setExercises] = React.useState<Exercise[]>([]);
     React.useEffect(() => {
         async function loadExercises() {
             try {
-                const data = await fetchExercises(session!.access_token);
+                const data = await fetchExercises(token!);
                 setExercises(data);
-                setLoading(false);
             } catch (error) {
                 console.error(error);
+            } finally {
                 setLoading(false);
             }
         }
-
         loadExercises();
     }, []);
 
@@ -58,12 +58,6 @@ export function AddWorkout() {
             ],
         },
     });
-
-    function saveToDb(values: WorkoutFormValues) {
-        setLoading(true);
-        createWorkout(session!.access_token, values);
-        setLoading(false);
-    }
 
     function addSet(index: number) {
         workoutForm.insertListItem(`workoutItems.${index}.sets`, {
@@ -83,6 +77,21 @@ export function AddWorkout() {
 
     function deleteExercise(index: number) {
         workoutForm.removeListItem('workoutItems', index);
+    }
+
+    const navigate = useNavigate();
+    const [error, setError] = React.useState<string | null>(null);
+    const [isSubmitting, setSubmitting] = React.useState(false);
+    async function saveToDb(values: WorkoutFormValues) {
+        try {
+            setSubmitting(true);
+            await createWorkout(token!, values);
+            navigate('/workouts');
+        } catch (error) {
+            if (error instanceof Error) setError(error.message);
+        } finally {
+            setSubmitting(false);
+        }
     }
 
     const fields = workoutForm.values.workoutItems?.map((item, index) => (
@@ -119,13 +128,15 @@ export function AddWorkout() {
         <>
             <Title title='Add Workout' />
 
-            <LoadingOverlay visible={isLoading} overlayBlur={2} />
+            <LoadingOverlay visible={isSubmitting} overlayBlur={2} />
+
+            {error && (<Alert icon={<IconAlertCircle />}>{error}</Alert>)}
 
             <form onSubmit={workoutForm.onSubmit((values) => saveToDb(values))}>
                 <DragDropContext
-                    onDragEnd={({ destination, source }) =>
+                    onDragEnd={({ destination, source }) => (
                         workoutForm.reorderListItem('workoutItems', { from: source.index, to: destination!.index })
-                    }
+                    )}
                 >
                     <Droppable droppableId='dnd-list' direction='vertical'>
                         {(provided) => (

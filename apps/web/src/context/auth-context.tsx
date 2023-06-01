@@ -1,79 +1,92 @@
 import React from 'react';
-import type { Session } from '@supabase/supabase-js';
 import { supabase } from '#/supabase-client';
-
-interface AuthContext {
-    error: Error | null;
-    loading: boolean;
-    session: Session | null;
-    signUp: (userInput: UserCredentials) => Promise<void>;
-    signIn: (userInput: UserCredentials) => Promise<void>;
-    signOut: () => void;
-};
+import type { Session } from '@supabase/supabase-js';
 
 export interface UserCredentials {
-    email: string;
+    email   : string;
     password: string;
-};
+}
+
+interface AuthContext {
+    error  : Error | null;
+    loading: boolean;
+    session: Session | null;
+    signUp : (userInput: UserCredentials) => Promise<void>;
+    signIn : (userInput: UserCredentials) => Promise<void>;
+    signOut: () => void;
+}
 
 export const AuthContext = React.createContext<AuthContext>({
-    error: null,
+    error  : null,
     loading: true,
     session: null,
-    signUp: async () => {},
-    signIn: async () => {},
-    signOut: () => {},
+    signUp : async () => { throw new Error('AuthProvider not implemented') },
+    signIn : async () => { throw new Error('AuthProvider not implemented') },
+    signOut:       () => { throw new Error('AuthProvider not implemented') },
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [error, setError] = React.useState<Error | null>(null);
     const [loading, setLoading] = React.useState(true);
+    const [error,   setError  ] = React.useState<Error | null>(null);
     const [session, setSession] = React.useState<Session | null>(null);
 
     React.useEffect(() => {
+        let isMounted = true;
+
         async function fetchSessionData() {
             setError(null);
 
             const { data, error } = await supabase.auth.getSession();
             if (error) setError(error);
 
-            setSession(data?.session || null);
-            setLoading(false);
+            if (isMounted) {
+                setSession(data?.session || null);
+                setLoading(false);
+            }
         }
         fetchSessionData();
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => { setSession(session) });
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            if (isMounted) setSession(session);
+        });
 
-        return () => subscription.unsubscribe();
+        return () => { isMounted = false; subscription.unsubscribe() };
     }, []);
 
-    async function signUp(userInput: UserCredentials) {
+    async function performAuthAction(action: () => Promise<unknown>) {
         setError(null);
+        try {
+            const result = await action();
+            setLoading(false);
+            return result;
+        } catch (error) {
+            if (error instanceof Error) setError(error);
+        }
+    }
 
-        const { data, error } = await supabase.auth.signUp(userInput);
-        if (error) setError(error);
+    async function signUp(userInput: UserCredentials) {
+        await performAuthAction(async () => {
+            const { data, error } = await supabase.auth.signUp(userInput);
+            if (error) throw error;
 
-        setSession(data?.session || null);
-        setLoading(false);
+            setSession(data?.session || null);
+        });
     }
 
     async function signIn(userInput: UserCredentials) {
-        setError(null);
-        
-        const { data, error } = await supabase.auth.signInWithPassword(userInput);
-        if (error) setError(error);
-        
-        setSession(data?.session || null);
-        setLoading(false);
-    }
-    
-    async function signOut() {
-        setError(null);
+        await performAuthAction(async () => {
+            const { data, error } = await supabase.auth.signInWithPassword(userInput);
+            if (error) throw error;
 
-        const { error } = await supabase.auth.signOut();
-        if (error) setError(error);
-        
-        setLoading(false);
+            setSession(data?.session || null);
+        });
+    }
+
+    async function signOut() {
+        await performAuthAction(async () => {
+            const { error } = await supabase.auth.signOut();
+            if (error) throw error;
+        });
     }
 
     const value = {

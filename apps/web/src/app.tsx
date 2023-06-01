@@ -1,6 +1,6 @@
-import { RouterProvider } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { RouterProvider } from 'react-router-dom';
 
 import { AuthProvider } from './context';
 import { router } from './router';

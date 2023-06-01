@@ -1,7 +1,8 @@
 import React from 'react';
-import { Link, Navigate } from 'react-router-dom';
+
 import { Button, Paper, PasswordInput, Stack, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { Link, Navigate } from 'react-router-dom';
 
 import { Title } from '#/components';
 import { useAuth } from '#/hooks';
