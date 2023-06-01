@@ -1,7 +1,8 @@
-import { app } from './app';
-import { config } from './config';
+import { startServer } from './server';
 
-const PORT = config.app.port;
-app.listen(PORT, async () => {
-    console.log(`Listening on port ${PORT}`);
+startServer();
+
+process.on('unhandledRejection', (error) => {
+    console.error('Unhandled Promise Rejection:', error);
+    process.exit(1);
 });

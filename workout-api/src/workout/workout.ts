@@ -8,13 +8,13 @@ export interface Workout {
 }
 
 interface WorkoutItem {
+    id: string;
     exercise: string;
     sets: Set[];
-    id?: string;
 }
 
 interface Set {
-    weight: number;
-    reps: number;
     id?: string;
+    weight: number | string;
+    reps: number | string;
 }
