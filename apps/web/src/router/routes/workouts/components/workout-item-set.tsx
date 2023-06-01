@@ -1,10 +1,9 @@
 import { ActionIcon, NumberInput } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 import { Trash } from '@phosphor-icons/react';
-
 import type { WorkoutFormValues } from '../add-workout';
 
-type Props = {
+interface Props {
     form: UseFormReturnType<WorkoutFormValues>;
     index: number;
     setIndex: number;

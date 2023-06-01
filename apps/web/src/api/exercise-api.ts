@@ -20,10 +20,10 @@ export interface MuscleGroupWithExercises extends MuscleGroup {
 
 export async function fetchExercises(token: string): Promise<Exercise[]> {
     const url = `${baseUrl}/exercises`;
-    return await sendRequest<Exercise[]>(url, token, 'GET');
+    return await sendRequest<Exercise[]>(token, url, 'GET');
 }
 
-export async function fetchMuscleGroupWithExercises(id: number, token: string): Promise<MuscleGroupWithExercises> {
+export async function fetchMuscleGroupWithExercises(token: string, id: number): Promise<MuscleGroupWithExercises> {
     const url = `${baseUrl}/muscle_groups/${id}`;
-    return await sendRequest<MuscleGroupWithExercises>(url, token, 'GET');
+    return await sendRequest<MuscleGroupWithExercises>(token, url, 'GET');
 }

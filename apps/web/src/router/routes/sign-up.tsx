@@ -1,8 +1,9 @@
 import React from 'react';
-import { Link, Navigate } from 'react-router-dom';
+
 import { Alert, Button, Paper, PasswordInput, Stack, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconAlertCircleFilled } from '@tabler/icons-react';
+import { Link, Navigate } from 'react-router-dom';
 
 import { Title } from '#/components';
 import { useAuth } from '#/hooks';
@@ -29,7 +30,7 @@ export function SignUp() {
     }
 
     const [error, setError] = React.useState<string | null>(null);
-    const [isLoading, setLoading] = React.useState<boolean>(false);
+    const [isLoading, setLoading] = React.useState(false);
     async function handleSignUp(values: Values) {
         try {
             setLoading(true);
@@ -48,7 +49,7 @@ export function SignUp() {
 
             <Paper withBorder shadow='md' component='form' p={16} w='100%' onSubmit={form.onSubmit(handleSignUp)}>
                 <Stack>
-                    {error ? (<Alert icon={<IconAlertCircleFilled />} color='red' >{error}</Alert>) : null}
+                    {error && (<Alert icon={<IconAlertCircleFilled />} color='red' >{error}</Alert>)}
                     
                     <TextInput
                         required

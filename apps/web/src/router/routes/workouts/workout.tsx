@@ -1,8 +1,9 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { Button, Divider, Flex, Group, LoadingOverlay, Paper, Stack, Text, TextInput } from '@mantine/core';
 
-import { WorkoutResponse, deleteWorkout, fetchWorkout } from '#/api/workout-api';
+import { Button, Divider, Flex, Group, LoadingOverlay, Paper, Stack, Text, TextInput } from '@mantine/core';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import { deleteWorkout, fetchWorkout, type WorkoutResponse } from '#/api/workout-api';
 import { Title } from '#/components';
 import { useAuth } from '#/hooks';
 
@@ -27,11 +28,12 @@ export function Workout() {
         loadWorkout();
     }, []);
 
-    function handleDelete(e: React.MouseEvent<HTMLButtonElement>) {
+    const navigate = useNavigate();
+    async function handleDelete(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
         try {
-            setLoading(true);
-            deleteWorkout(session!.access_token, workoutId as string);
+            await deleteWorkout(session!.access_token, workoutId!);
+            navigate('/workouts');
         } catch (error) {
             if (error instanceof Error) console.error(error.message);
         } finally {
