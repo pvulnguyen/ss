@@ -7,19 +7,21 @@ import expressWinston from 'express-winston';
 import helmet from 'helmet';
 
 import { config } from './config';
-import { authenticate, errorHandler } from './middleware';
+import { asyncHandler, authenticate, errorHandler } from './middleware';
 import { router } from './workout/router';
 
 export function startServer(): void {
     const app: Application = express();
     app.disable('x-powered-by');
 
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
     app.use(helmet());
     app.use(cors());
     app.use(compression());
     app.use(expressWinston.logger(config.logger));
 
-    app.use(`/${config.app.apiPrefix}/workouts`, authenticate, router);
+    app.use(`/${config.app.apiPrefix}/workouts`, authenticate, asyncHandler(router));
 
     app.use(errorHandler);
 
@@ -29,10 +31,9 @@ export function startServer(): void {
     });
 
     process.on('SIGTERM', () => {
-        console.log('SIGTERM signal received: shutting down gracefully');
-
+        console.log('SIGTERM signal received: closing HTTP server');
         server.close(() => {
-            console.log('Server closed');
+            console.log('HTTP server closed');
             process.exit(0);
         });
     });

@@ -1,4 +1,5 @@
 import { MongoClient, MongoServerError } from 'mongodb';
+
 import type { Collection, Db } from 'mongodb';
 import type { Workout } from './workout';
 
@@ -30,9 +31,11 @@ async function applySchemaValidation(db: Db) {
                 workoutItems: {
                     bsonType: 'array',
                     minItems: 1,
+                    additionalProperties: false,
                     items: {
                         bsonType: 'object',
                         required: ['id', 'exercise'],
+                        additionalProperties: false,
                         properties: {
                             id      : { bsonType: 'string', description: '"id" is required.'       },
                             exercise: { bsonType: 'string', description: '"exercise" is required.' },
