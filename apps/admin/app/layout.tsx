@@ -4,8 +4,8 @@ import type {Metadata} from 'next';
 
 export const metadata: Metadata = {
   title: {
-    default: 'SuperSet',
-    template: '%s - SuperSet',
+    default: 'SuperSet Admin',
+    template: '%s - SuperSet Admin',
   },
 };
 
