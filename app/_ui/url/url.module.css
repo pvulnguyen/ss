@@ -1,0 +1,7 @@
+.link {
+  display: flex;
+  text-decoration: none;
+  justify-content: center;
+  margin-top: 1rem;
+  color: var(--mantine-color-anchor);
+}
