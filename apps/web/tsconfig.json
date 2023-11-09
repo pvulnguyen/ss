@@ -1,0 +1,12 @@
+{
+  "extends": "tsconfig/nextjs.json",
+  "compilerOptions": {
+    "paths": {
+      "@web/*": ["./app/*"],
+      "@web/exercises/components": ["./app/(routes)/exercises/_components/index.ts"],
+      "@web/workouts/components": ["./app/(routes)/workouts/_components/index.ts"],
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

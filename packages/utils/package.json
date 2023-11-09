@@ -1,0 +1,14 @@
+{
+  "name": "@superset/utils",
+  "version": "0.0.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "devDependencies": {
+    "@superset/data-access-exercises": "workspace:*",
+    "@superset/db": "workspace:*",
+    "@types/node": "^20.9.0",
+    "eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.2.2"
+  }
+}

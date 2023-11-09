@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "React Library",
+  "extends": "./base.json",
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "esnext",
+    "lib": ["es2016"],
+    "jsx": "react-jsx"
+  }
+}

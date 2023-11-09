@@ -1,0 +1,141 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id        String         @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  username  String         @unique
+  password  String
+  role      Role           @default(USER)
+  exercises UserExercise[]
+  workouts  Workout[]
+
+  @@id([id])
+  @@map("users")
+}
+
+model Workout {
+  id     String       @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user   User         @relation(fields: [userId], references: [id])
+  userId String       @map("user_id") @db.Uuid
+  name   String?
+  sets   WorkoutSet[]
+
+  @@id([id])
+  @@map("workouts")
+}
+
+model WorkoutSet {
+  id                   String              @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  workout              Workout             @relation(fields: [workoutId], references: [id])
+  workoutId            String              @map("workout_id") @db.Uuid
+  predefinedExercise   PredefinedExercise? @relation(fields: [predefinedExerciseId], references: [id])
+  predefinedExerciseId String?             @map("predefined_exercise_id") @db.Uuid
+  userExercise         UserExercise?       @relation(fields: [userExerciseId], references: [id])
+  userExerciseId       String?             @map("user_exercise_id") @db.Uuid
+  weight               Decimal             @db.Decimal(5, 2)
+  reps                 Int
+
+  @@id([id])
+  @@map("workout_sets")
+}
+
+model PredefinedExercise {
+  id              String       @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  base            Base         @relation(fields: [baseId], references: [id], onDelete: Cascade)
+  baseId          Int          @map("base_id")
+  primaryTarget   MuscleGroup? @relation(fields: [primaryTargetId], references: [id])
+  primaryTargetId Int?         @map("primary_target_id")
+  modifier        Modifier?    @relation(fields: [modifierId], references: [id])
+  modifierId      Int?         @map("modifier_id")
+  position        Position?    @relation(fields: [positionId], references: [id])
+  positionId      Int?         @map("position_id")
+  equipment       Equipment?   @relation(fields: [equipmentId], references: [id])
+  equipmentId     Int?         @map("equipment_id")
+  sets            WorkoutSet[]
+
+  @@id([id])
+  @@map("predefined_exercises")
+}
+
+model UserExercise {
+  id              String       @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdBy       User         @relation(fields: [userId], references: [id])
+  userId          String       @map("user_id") @db.Uuid
+  base            Base         @relation(fields: [baseId], references: [id])
+  baseId          Int          @map("base_id")
+  primaryTarget   MuscleGroup  @relation(fields: [primaryTargetId], references: [id])
+  primaryTargetId Int          @map("primary_target_id")
+  modifier        Modifier?    @relation(fields: [modifierId], references: [id])
+  modifierId      Int?         @map("modifier_id")
+  position        Position?    @relation(fields: [positionId], references: [id])
+  positionId      Int?         @map("position_id")
+  equipment       Equipment?   @relation(fields: [equipmentId], references: [id])
+  equipmentId     Int?         @map("equipment_id")
+  sets            WorkoutSet[]
+
+  @@id([id])
+  @@map("user_exercises")
+}
+
+model Base {
+  id                  Int                  @default(autoincrement())
+  name                String               @unique
+  muscleGroups        MuscleGroup[]
+  predefinedExercises PredefinedExercise[]
+  userExercises       UserExercise[]
+
+  @@id([id])
+  @@map("bases")
+}
+
+model Modifier {
+  id                  Int                  @default(autoincrement())
+  name                String               @unique
+  predefinedExercises PredefinedExercise[]
+  userExercises       UserExercise[]
+
+  @@id([id])
+  @@map("modifiers")
+}
+
+model Position {
+  id                  Int                  @default(autoincrement())
+  name                String               @unique
+  predefinedExercises PredefinedExercise[]
+  userExercises       UserExercise[]
+
+  @@id([id])
+  @@map("positions")
+}
+
+model Equipment {
+  id                  Int                  @default(autoincrement())
+  name                String               @unique
+  predefinedExercises PredefinedExercise[]
+  userExercises       UserExercise[]
+
+  @@id([id])
+  @@map("equipment")
+}
+
+model MuscleGroup {
+  id                  Int                  @default(autoincrement())
+  name                String               @unique
+  bases               Base[]
+  predefinedExercises PredefinedExercise[]
+  userExercises       UserExercise[]
+
+  @@id([id])
+  @@map("muscle_groups")
+}

@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# SuperSet
 
-## Getting Started
+## What's inside?
 
-First, run the development server:
+This [Turborepo](https://turbo.build/) monorepo contains the following:
+
+### Apps and Packages
+
+- `web`: a [Next.js](https://nextjs.org/) app
+- `database`: a [Prisma](https://prisma.io/) ORM wrapper for database access and management
+- `eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+
+### Utilities
+
+- [Docker Compose](https://docs.docker.com/compose/) for local database
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting
+- [Prisma](https://prisma.io/) for database ORM
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+
+### Database
+
+This project uses [Prisma](https://prisma.io/) to access and manage the database. Docker Compose is used to create and run a PostgreSQL server locally, which is used during development to limit read/write operations to the production database hosted on [Neon](https://neon.tech/).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cd superset
+docker-compose up -d
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Once deployed, copy the `.env.example` file to `.env` so that Prisma can access the `DATABASE_URL` environment variable.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cp .env.example .env
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+> 💡 Please visit this [page](https://www.prisma.io/docs/guides/development-environment/environment-variables/using-multiple-env-files) to learn how to configure Prisma to use multiple `.env` files.
 
-## Learn More
+To create and deploy migrations to the database, use [Prisma Migrate](https://www.prisma.io/migrate):
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm turbo db:migrate:dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To push any existing migrations to the database, use one of the following commands:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```bash
+pnpm turbo db:push
 
-## Deploy on Vercel
+# OR
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+pnpm turbo db:migrate:deploy
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+> 💡 Please visit this [page](https://www.prisma.io/docs/concepts/components/prisma-migrate/db-push#choosing-db-push-or-prisma-migrate) to learn about the diferrences between `db push` and `db migrate:deploy`.
+
+This project seeds the database by using Prisma's [seeding functionality](https://www.prisma.io/docs/guides/database/seed-database).
+
+```bash
+pnpm turbo db:seed
+```
+
+### Build
+
+To build all of the apps and packages in this monorepo, run the following command:
+
+```bash
+pnpm turbo build
+```
+
+### Develop
+
+To develop all apps and packages, run the following command:
+
+```bash
+pnpm turbo dev
+```

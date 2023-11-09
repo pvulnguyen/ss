@@ -1,0 +1,11 @@
+{
+  "name": "@superset/data-access-users",
+  "version": "0.0.0",
+  "devDependencies": {
+    "@superset/db": "workspace:*",
+    "@types/node": "^20.9.0",
+    "eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.2.2"
+  }
+}
