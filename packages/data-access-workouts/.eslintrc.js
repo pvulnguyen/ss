@@ -1,3 +1,3 @@
 module.exports = {
-  extends: ['config-eslint/library'],
+  extends: ['custom/library'],
 };
